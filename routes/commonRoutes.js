@@ -6,7 +6,7 @@ getAll = (table) => {
     db.query(sql, (err, result) => {
         if(err) throw err;
         if(result.length === 0) {
-            console.log("There are no current departments.");
+            console.log(`There are no current ${table}.`);
             process.exit();
         } else {
             console.table(result);

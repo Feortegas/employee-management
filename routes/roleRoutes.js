@@ -6,7 +6,7 @@ addRole = (title, salary, department_id) => {
     const params  = [title, salary, department_id];
     db.query(sql, params, (err, rows) => {
         if(err) throw err;
-        console.log("Role has been added!");
+        console.log('New Role added!');
         process.exit();
     });
 };

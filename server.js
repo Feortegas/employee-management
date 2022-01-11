@@ -10,7 +10,6 @@ const inquirer = require('inquirer');
 // Start server after DB connection
 db.connect(err => {
   if (err) throw err;
-  console.log('Database connected.');
 });
 
 
@@ -18,8 +17,8 @@ const userInput = () => {
   return inquirer.prompt([
     {
       type: 'list',
-      message: 'What would you like to do?',
       name: 'action',
+      message: 'What would you like to do?',
       choices: [
         'View all Departments', 
         'View all Roles', 
@@ -31,6 +30,76 @@ const userInput = () => {
       ]
     }
   ])
+};
+
+// user input - new department
+const newDepartment = departmentData => {
+  return inquirer.prompt([
+    {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the new Department?'
+    }
+  ])
+  .then(departmentData => {
+    return addDepartment(departmentData.name);
+  })
+};
+
+
+// user input - new role
+const newRole = roleData => {
+
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'What is the name of the new Role?'
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'What is the Salary for this Role?'
+    },
+    {
+      type: 'input',
+      name: 'department',
+      message: 'What Department it belongs to?'
+    }
+  ])
+  .then(roleData => {
+    return addRole(roleData.name, roleData.salary, roleData.department);
+  })
+};
+
+// user input - new employee
+const newEmployee = employeeData => {
+
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'firstName',
+      message: 'What is the First Name of the new Employee?'
+    },
+    {
+      type: 'input',
+      name: 'lastName',
+      message: 'What is the Last Name of the new Employee?'
+    },
+    {
+      type: 'input',
+      name: 'role',
+      message: `What's the new Employee's Role ID?`
+    },
+    {
+      type: 'input',
+      name: 'manager',
+      message: `Who's the new Employee's Manager ID?`
+    }
+  ])
+  .then(employeeData => {
+    return addEmployee(employeeData.firstName, employeeData.lastName, employeeData.role, employeeData.manager);
+  })
 };
 
 userInput()
@@ -49,13 +118,13 @@ userInput()
       getAll(table);
     } else if (data.action === 'Add a Department') {
       // add a department
-      addDepartment(data);
+      newDepartment();
     } else if (data.action === 'Add a Role') {
       // add a Role
-      addRole(data);
+      newRole();
     } else if (data.action === 'Add an Employee') {
       // add an Employee
-      addEmployee(data);
+      newEmployee();
     } else if (data.action === 'Update an Employee') {
       // Update an Employee data
     }
